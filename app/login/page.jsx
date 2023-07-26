@@ -1,18 +1,18 @@
 // ---- IMPORTACIONES ---- //
-import { metadata } from './layout';
+import { metadata } from '../layout';
 import Layout from '@/components/Layout';
 // ----------------------- //
 
 // ---- METADATA ---- //
-metadata.title = 'Inicio - NodeSend';
+metadata.title = 'Iniciar Sesion - NodeSend';
 // ------------------ //
 
-// ---- PAGINA (INICIO) ---- //
-export default function Home() {
+// ---- PAGINA (LOGIN) ---- //
+export default function Login() {
     return (
         <Layout>
-            <div>Home</div>
+            <div>Login</div>
         </Layout>
     );
 }
-// ------------------------- //
+// ------------------------ //
