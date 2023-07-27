@@ -7,16 +7,22 @@ import Layout from '@/components/Layout';
 // ----------------------- //
 
 // ---- PAGINA (LOGIN) ---- //
-export default function Login() {
+export default function CrearCuenta() {
 	// ---- VALIDACION FORMULARIO ---- //
 	const formik = useFormik({
 		initialValues: {
+			nombre: '',
 			email: '',
 			password: '',
 		},
 		validationSchema: Yup.object({
-			email: Yup.string().required('El Email es Obligatorio'),
-			password: Yup.string().required('La Contraseña es Obligatoria'),
+			nombre: Yup.string().required('El Nombre es Obligatorio'),
+			email: Yup.string()
+				.email('El Email no es Valido')
+				.required('El Email es Obligatorio'),
+			password: Yup.string()
+				.required('La Contraseña es Obligatoria')
+				.min(6, 'La Contraseña debe contener al menos 6 caracteres'),
 		}),
 		onSubmit: valores => {
 			console.log(valores);
@@ -26,20 +32,53 @@ export default function Login() {
 
 	return (
 		<Layout>
-			{/* Iniciar Sesion */}
+			{/* Crear Cuenta */}
 			<div className="md:w-4/5 xl:w-3/5 mx-auto mb-32">
 				{/* Titulo */}
 				<h2 className="text-4xl font-bold text-gray-800 text-center my-4 uppercase">
-					Iniciar Sesion
+					Crear Cuenta
 				</h2>
 				{/* Contenedor */}
 				<div className="flex justify-center mt-5">
 					<div className="w-full max-w-lg">
-						{/* Formulario Para Iniciar Sesion */}
+						{/* Formulario Para Crear Cuenta */}
 						<form
 							className="bg-white rounded shadow-md px-8 pt-5 pb-8 mb-4"
 							onSubmit={formik.handleSubmit}
 						>
+							{/* Nombre del Usuario */}
+							<div className="mb-4">
+								{/* Texto Ayuda y Errores */}
+								<div className="flex flex-col cel:flex-row justify-between cel:gap-10">
+									<label
+										className="block text-black text-sm font-bold mb-2 uppercase"
+										htmlFor="nombre"
+									>
+										Nombre
+									</label>
+									{formik.touched.nombre &&
+									formik.errors.nombre ? (
+										<p className="font-bold uppercase text-xs text-red-500">
+											{formik.errors.nombre}
+										</p>
+									) : null}
+								</div>
+								{/* Entrada del Nombre */}
+								<input
+									className={`${
+										formik.touched.nombre &&
+										formik.errors.nombre
+											? 'border-red-500'
+											: 'border-gray-200'
+									} border-[1.5px] shadow appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
+									id="nombre"
+									type="text"
+									placeholder="Nombre de Usuario"
+									value={formik.values.nombre}
+									onChange={formik.handleChange}
+									onBlur={formik.handleBlur}
+								/>
+							</div>
 							{/* Email del Usuario */}
 							<div className="mb-4">
 								{/* Texto Ayuda y Errores */}
@@ -112,7 +151,7 @@ export default function Login() {
 								className="w-full text-center bg-gradient-to-r bg-rose-500 rounded-lg text-white uppercase font-black py-2 cursor-pointer hover:bg-black transition-colors duration-300"
 								type="submit"
 							>
-								Iniciar Sesion
+								Crear Cuenta
 							</button>
 						</form>
 					</div>
