@@ -11,7 +11,7 @@ import Layout from '@/components/Layout';
 // ---- PAGINA (LOGIN) ---- //
 export default function CrearCuenta() {
     // ---- CONTEXTs ---- //
-    const { usuarioAutenticado } = useContext(AuthContext);
+    const { registrarUsuario } = useContext(AuthContext);
     // ------------------ //
 
     // ---- VALIDACION FORMULARIO ---- //
@@ -31,7 +31,7 @@ export default function CrearCuenta() {
                 .min(6, 'La Contraseña debe contener al menos 6 caracteres'),
         }),
         onSubmit: (valores) => {
-            console.log(valores);
+            registrarUsuario(valores);
         },
     });
     // ------------------------------- //
