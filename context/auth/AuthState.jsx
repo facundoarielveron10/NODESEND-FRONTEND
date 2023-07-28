@@ -3,58 +3,74 @@
 import { useReducer } from 'react';
 import AuthContext from './AuthContext';
 import AuthReducer from './AuthReducer';
-import { USUARIO_AUTENTICADO } from '@/types';
+import { REGISTRO_EXITOSO, REGISTRO_ERROR, LIMPIAR_ALERTA } from '@/types';
+import { useRouter } from 'next/navigation';
 import clienteAxios from '@/config/axios';
 // ----------------------- //
 
 // ---- ESTADOS DE LA AUTENTICACION ---- //
 const AuthState = ({ children }) => {
-    // ---- ESTADOS ---- //
-    const initialState = {
-        token: '',
-        autenticado: null,
-        usuario: null,
-        mensaje: null,
-    };
-    // ----------------- //
+	// ---- ESTADOS ---- //
+	const initialState = {
+		token: '',
+		autenticado: null,
+		usuario: null,
+		mensaje: null,
+		error: null,
+	};
+	// ----------------- //
 
-    // ---- REDUCER ---- //
-    const [state, dispatch] = useReducer(AuthReducer, initialState);
-    // ----------------- //
+	// ---- REDUCER ---- //
+	const [state, dispatch] = useReducer(AuthReducer, initialState);
+	// ----------------- //
 
-    // ---- FUNCIONES ---- //
-    const registrarUsuario = async (datos) => {
-        try {
-            const respuesta = await clienteAxios.post('/api/usuarios', datos);
-            console.log(respuesta);
-        } catch (error) {
-            console.log(error);
-        }
-        dispatch({});
-    };
+	// ---- ROUTER ---- //
+	const router = useRouter();
+	// ---------------- //
 
-    const usuarioAutenticado = (nombre) => {
-        dispatch({
-            type: USUARIO_AUTENTICADO,
-            payload: nombre,
-        });
-    };
-    // ------------------- //
+	// ---- FUNCIONES ---- //
+	const registrarUsuario = async datos => {
+		try {
+			// Pedido a la base de datos
+			const { data } = await clienteAxios.post('/api/usuarios', datos);
+			// Cambiamos los estados si el registro es exitoso
+			dispatch({
+				type: REGISTRO_EXITOSO,
+				payload: data.msg,
+			});
+			// Redireccionamos
+			router.push('/login');
+		} catch (error) {
+			console.log(error);
+			dispatch({
+				type: REGISTRO_ERROR,
+				payload: error.response.data.msg,
+			});
+		}
 
-    return (
-        <AuthContext.Provider
-            value={{
-                token: state.token,
-                autenticado: state.autenticado,
-                usuario: state.usuario,
-                mensaje: state.mensaje,
-                registrarUsuario,
-                usuarioAutenticado,
-            }}
-        >
-            {children}
-        </AuthContext.Provider>
-    );
+		// Limpia la alerta
+		setTimeout(() => {
+			dispatch({
+				type: LIMPIAR_ALERTA,
+			});
+		}, 3000);
+	};
+	// ------------------- //
+
+	return (
+		<AuthContext.Provider
+			value={{
+				token: state.token,
+				autenticado: state.autenticado,
+				usuario: state.usuario,
+				mensaje: state.mensaje,
+				error: state.error,
+				registrarUsuario,
+			}}
+		>
+			{children}
+		</AuthContext.Provider>
+	);
 };
 // ------------------------------------- //
 
