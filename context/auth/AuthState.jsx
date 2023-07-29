@@ -3,7 +3,13 @@
 import { useReducer } from 'react';
 import AuthContext from './AuthContext';
 import AuthReducer from './AuthReducer';
-import { REGISTRO_EXITOSO, REGISTRO_ERROR, LIMPIAR_ALERTA } from '@/types';
+import {
+	REGISTRO_EXITOSO,
+	REGISTRO_ERROR,
+	LIMPIAR_ALERTA,
+	AUTENTICACION_EXITO,
+	AUTENTICACION_ERROR,
+} from '@/types';
 import { useRouter } from 'next/navigation';
 import clienteAxios from '@/config/axios';
 // ----------------------- //
@@ -12,7 +18,8 @@ import clienteAxios from '@/config/axios';
 const AuthState = ({ children }) => {
 	// ---- ESTADOS ---- //
 	const initialState = {
-		token: '',
+		token:
+			typeof window !== 'undefined' ? localStorage.getItem('token') : '',
 		autenticado: null,
 		usuario: null,
 		mensaje: null,
@@ -41,7 +48,9 @@ const AuthState = ({ children }) => {
 			// Redireccionamos
 			router.push('/login');
 		} catch (error) {
+			// Mostramos en consola el error
 			console.log(error);
+			// Cambiamos los estados si el registro es erroneo
 			dispatch({
 				type: REGISTRO_ERROR,
 				payload: error.response.data.msg,
@@ -55,6 +64,26 @@ const AuthState = ({ children }) => {
 			});
 		}, 3000);
 	};
+
+	const iniciarSesion = async datos => {
+		try {
+			// Pedido a la base de datos
+			const { data } = await clienteAxios.post('/api/auth', datos);
+			// Cambiamos los estados si el registro es exitoso
+			dispatch({
+				type: AUTENTICACION_EXITO,
+				payload: data.token,
+			});
+		} catch (error) {
+			// Mostramos en consola el error
+			console.log(error);
+			// Cambiamos los estados si el registro es erroneo
+			dispatch({
+				type: AUTENTICACION_ERROR,
+				payload: error.response.data.msg,
+			});
+		}
+	};
 	// ------------------- //
 
 	return (
@@ -66,6 +95,7 @@ const AuthState = ({ children }) => {
 				mensaje: state.mensaje,
 				error: state.error,
 				registrarUsuario,
+				iniciarSesion,
 			}}
 		>
 			{children}

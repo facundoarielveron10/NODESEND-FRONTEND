@@ -1,10 +1,16 @@
+'use client';
 // ---- IMPORTACIONES ---- //
+import { useContext } from 'react';
+import AuthContext from '@/context/auth/AuthContext';
 import Link from 'next/link';
 import Image from 'next/image';
 // ----------------------- //
 
 // ---- COMPONENTE (HEADER) ---- //
 export default function Header() {
+	// ---- CONTEXTs ---- //
+	const { autenticado } = useContext(AuthContext);
+	// ------------------ //
 	return (
 		<header className="py-8 px-4 flex flex-col md:flex-row items-center justify-between">
 			{/* Logotipo */}
@@ -18,21 +24,25 @@ export default function Header() {
 					priority={true}
 				/>
 			</Link>
-			{/* Enlaces */}
-			<div className="flex flex-col cel:flex-row gap-4">
-				<Link
-					className="bg-rose-500 hover:bg-rose-600 transition-colors duration-300 px-4 py-2 text-white rounded-lg uppercase font-black"
-					href="/login"
-				>
-					Iniciar Sesion
-				</Link>
-				<Link
-					className="bg-black hover:bg-gray-800 transition-colors duration-300 px-4 py-2 text-white rounded-lg uppercase font-black"
-					href="/crear-cuenta"
-				>
-					Crear Cuenta
-				</Link>
-			</div>
+			{autenticado && (
+				<>
+					{/* Enlaces */}
+					<div className="flex flex-col cel:flex-row gap-4">
+						<Link
+							className="bg-rose-500 hover:bg-rose-600 transition-colors duration-300 px-4 py-2 text-white rounded-lg uppercase font-black"
+							href="/login"
+						>
+							Iniciar Sesion
+						</Link>
+						<Link
+							className="bg-black hover:bg-gray-800 transition-colors duration-300 px-4 py-2 text-white rounded-lg uppercase font-black"
+							href="/crear-cuenta"
+						>
+							Crear Cuenta
+						</Link>
+					</div>
+				</>
+			)}
 		</header>
 	);
 }

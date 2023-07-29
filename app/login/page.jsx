@@ -1,13 +1,34 @@
 'use client';
 
 // ---- IMPORTACIONES ---- //
+import { useContext, useEffect } from 'react';
+import AuthContext from '@/context/auth/AuthContext';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useRouter } from 'next/navigation';
 import Layout from '@/components/Layout';
+import Alerta from '@/components/Alerta';
 // ----------------------- //
 
 // ---- PAGINA (LOGIN) ---- //
 export default function Login() {
+	// ---- CONTEXTs ---- //
+	const { iniciarSesion, mensaje, token } = useContext(AuthContext);
+	// ------------------ //
+
+	// ---- ROUTER ---- //
+	const router = useRouter();
+	// ---------------- //
+
+	// ---- EFECTOS ---- //
+	useEffect(() => {
+		if (token) {
+			router.push('/');
+		}
+	}, [token]);
+
+	// ----------------- //
+
 	// ---- VALIDACION FORMULARIO ---- //
 	const formik = useFormik({
 		initialValues: {
@@ -19,7 +40,7 @@ export default function Login() {
 			password: Yup.string().required('La Contraseña es Obligatoria'),
 		}),
 		onSubmit: valores => {
-			console.log(valores);
+			iniciarSesion(valores);
 		},
 	});
 	// ------------------------------- //
@@ -35,6 +56,8 @@ export default function Login() {
 				{/* Contenedor */}
 				<div className="flex justify-center mt-5">
 					<div className="w-full max-w-lg">
+						{/* Alerta */}
+						{mensaje && <Alerta />}
 						{/* Formulario Para Iniciar Sesion */}
 						<form
 							className="bg-white rounded shadow-md px-8 pt-5 pb-8 mb-4"
