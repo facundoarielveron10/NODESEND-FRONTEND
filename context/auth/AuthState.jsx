@@ -6,12 +6,15 @@ import AuthReducer from './AuthReducer';
 import {
 	REGISTRO_EXITOSO,
 	REGISTRO_ERROR,
-	LIMPIAR_ALERTA,
 	AUTENTICACION_EXITO,
 	AUTENTICACION_ERROR,
+	USUARIO_AUTENTICADO,
+	CERRAR_SESION,
+	LIMPIAR_ALERTA,
 } from '@/types';
 import { useRouter } from 'next/navigation';
 import clienteAxios from '@/config/axios';
+import tokenAuth from '@/config/tokenAuth';
 // ----------------------- //
 
 // ---- ESTADOS DE LA AUTENTICACION ---- //
@@ -84,6 +87,44 @@ const AuthState = ({ children }) => {
 			});
 		}
 	};
+
+	const usuarioAutenticado = async () => {
+		// Obtener el token del localStorage
+		const token = localStorage.getItem('token');
+		// Validar el token del usuario
+		if (token) {
+			tokenAuth(token);
+		} else {
+			return;
+		}
+
+		try {
+			// Enviar el Json Web Token
+			const { data } = await clienteAxios.get('/api/auth');
+			// Quitar atributos inecesarios al objeto
+			delete data.usuario.exp;
+			delete data.usuario.iat;
+			// Cambiamos los estados
+			dispatch({
+				type: USUARIO_AUTENTICADO,
+				payload: data.usuario,
+			});
+		} catch (error) {
+			// Mostramos en consola el error
+			console.log(error);
+			// Cambiamos los estados si el registro es erroneo
+			dispatch({
+				type: AUTENTICACION_ERROR,
+				payload: error.response.data.msg,
+			});
+		}
+	};
+
+	const cerrarSesion = () => {
+		dispatch({
+			type: CERRAR_SESION,
+		});
+	};
 	// ------------------- //
 
 	return (
@@ -95,7 +136,9 @@ const AuthState = ({ children }) => {
 				mensaje: state.mensaje,
 				error: state.error,
 				registrarUsuario,
+				usuarioAutenticado,
 				iniciarSesion,
+				cerrarSesion,
 			}}
 		>
 			{children}

@@ -13,7 +13,7 @@ export default function Layout({ children }) {
 					{/* Header */}
 					<Header />
 					{/* Contenido de las paginas */}
-					<main className="mt-20">{children}</main>
+					<main className="mt-10">{children}</main>
 				</div>
 			</div>
 		</>

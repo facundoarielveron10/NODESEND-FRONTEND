@@ -26,7 +26,6 @@ export default function Login() {
 			router.push('/');
 		}
 	}, [token]);
-
 	// ----------------- //
 
 	// ---- VALIDACION FORMULARIO ---- //

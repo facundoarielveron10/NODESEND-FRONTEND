@@ -2,9 +2,11 @@
 import {
 	REGISTRO_EXITOSO,
 	REGISTRO_ERROR,
-	LIMPIAR_ALERTA,
 	AUTENTICACION_EXITO,
 	AUTENTICACION_ERROR,
+	USUARIO_AUTENTICADO,
+	CERRAR_SESION,
+	LIMPIAR_ALERTA,
 } from '@/types';
 // ----------------------- //
 
@@ -30,6 +32,19 @@ export default (state, action) => {
 				...state,
 				token: action.payload,
 				autenticado: true,
+			};
+		case USUARIO_AUTENTICADO:
+			return {
+				...state,
+				usuario: action.payload,
+			};
+		case CERRAR_SESION:
+			localStorage.removeItem('token');
+			return {
+				...state,
+				usuario: null,
+				token: null,
+				autenticado: null,
 			};
 		case LIMPIAR_ALERTA:
 			return {

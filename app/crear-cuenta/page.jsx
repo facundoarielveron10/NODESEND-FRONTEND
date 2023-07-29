@@ -1,10 +1,11 @@
 'use client';
 
 // ---- IMPORTACIONES ---- //
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import AuthContext from '@/context/auth/AuthContext';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useRouter } from 'next/navigation';
 import Layout from '@/components/Layout';
 import Alerta from '@/components/Alerta';
 // ----------------------- //
@@ -14,6 +15,18 @@ export default function CrearCuenta() {
 	// ---- CONTEXTs ---- //
 	const { registrarUsuario, mensaje } = useContext(AuthContext);
 	// ------------------ //
+
+	// ---- ROUTER ---- //
+	const router = useRouter();
+	// ---------------- //
+
+	// ---- EFECTOS ---- //
+	useEffect(() => {
+		if (token) {
+			router.push('/');
+		}
+	}, [token]);
+	// ----------------- //
 
 	// ---- VALIDACION FORMULARIO ---- //
 	const formik = useFormik({
