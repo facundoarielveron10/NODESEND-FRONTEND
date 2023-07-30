@@ -3,9 +3,9 @@ import { createContext } from 'react';
 // ----------------------- //
 
 // ---- CONTEXT DE AUTENTICACION ---- //
-const AuthContext = createContext();
+const AppContext = createContext();
 // ---------------------------------- //
 
 // ---- EXPORTACIONES ---- //
-export default AuthContext;
+export default AppContext;
 // ----------------------- //
