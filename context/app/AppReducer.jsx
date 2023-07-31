@@ -13,6 +13,7 @@ import {
     SUBIR_ARCHIVO_ERROR,
     CREAR_ENLACE_EXITO,
     CREAR_ENLACE_ERROR,
+    LIMPIAR_STATE,
 } from '@/types';
 // ----------------------- //
 
@@ -115,6 +116,25 @@ export default (state, action) => {
                 error: true,
             };
         // ----------------------------- //
+
+        // ---- REINICIAR STATE ---- //
+        case LIMPIAR_STATE:
+            return {
+                ...state,
+                mensaje: null,
+                error: null,
+                mensaje_archivo: null,
+                archivo: {
+                    nombre: '',
+                    nombre_original: '',
+                    descargas: 1,
+                    password: '',
+                    autor: null,
+                    url: '',
+                },
+                cargando: null,
+            };
+        // ------------------------- //
         default:
             return state;
     }

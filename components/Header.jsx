@@ -9,13 +9,13 @@ import Image from 'next/image';
 // ---- COMPONENTE (HEADER) ---- //
 export default function Header() {
     // ---- CONTEXTs ---- //
-    const { cerrarSesion, usuario } = useContext(AppContext);
+    const { cerrarSesion, usuario, limpiarState } = useContext(AppContext);
     // ------------------ //
 
     return (
         <header className="py-8 px-4 flex flex-col md:flex-row items-center justify-between">
             {/* Logotipo */}
-            <Link href="/">
+            <Link href="/" onClick={() => limpiarState()}>
                 <Image
                     className="w-64 mb-8 md:mb-0"
                     src="/img/logo.svg"
