@@ -21,7 +21,10 @@ export default function Home() {
 
     // ---- EFECTOS ---- //
     useEffect(() => {
-        usuarioAutenticado();
+        const token = localStorage.getItem('token');
+        if (token) {
+            usuarioAutenticado();
+        }
     }, []);
 
     // ----------------- //

@@ -4,12 +4,13 @@ import { useCallback, useContext } from 'react';
 import AppContext from '@/context/app/AppContext';
 import { useDropzone } from 'react-dropzone';
 import Spinner from './Spinner';
+import Formulario from './Formulario';
 // ----------------------- //
 
 // ---- COMPONENTE (DROPZONE) ---- //
 export default function Dropzone() {
     // ---- CONTEXTs ---- //
-    const { cargando, mostrarAlerta, subirArchivo, crearEnlace } =
+    const { cargando, mostrarAlerta, subirArchivo, crearEnlace, autenticado } =
         useContext(AppContext);
     // ------------------ //
 
@@ -57,6 +58,8 @@ export default function Dropzone() {
                     </h4>
                     {/* Listado de archivos subidos */}
                     <ul className="text-center">{archivos}</ul>
+                    {/* Datos para el usuario Autenticado */}
+                    {autenticado ? <Formulario /> : null}
                     {/* Boton de creacion de enlace */}
                     {cargando ? (
                         <Spinner />

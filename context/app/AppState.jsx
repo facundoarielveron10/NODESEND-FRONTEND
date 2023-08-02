@@ -17,6 +17,8 @@ import {
     SUBIR_ARCHIVO_ERROR,
     CREAR_ENLACE_EXITO,
     CREAR_ENLACE_ERROR,
+    AGREGAR_PASSWORD,
+    AGREGAR_DESCARGAS,
     LIMPIAR_STATE,
 } from '@/types';
 import { useRouter } from 'next/navigation';
@@ -124,14 +126,16 @@ const AppState = ({ children }) => {
         try {
             // Enviar el Json Web Token
             const { data } = await clienteAxios.get('/api/auth');
-            // Quitar atributos inecesarios al objeto
-            delete data.usuario.exp;
-            delete data.usuario.iat;
-            // Cambiamos los estados
-            dispatch({
-                type: USUARIO_AUTENTICADO,
-                payload: data.usuario,
-            });
+            if (data.usuario) {
+                // Quitar atributos inecesarios al objeto
+                delete data.usuario.exp;
+                delete data.usuario.iat;
+                // Cambiamos los estados
+                dispatch({
+                    type: USUARIO_AUTENTICADO,
+                    payload: data.usuario,
+                });
+            }
         } catch (error) {
             // Mostramos en consola el error
             console.log(error);
@@ -241,6 +245,22 @@ const AppState = ({ children }) => {
             type: LIMPIAR_STATE,
         });
     };
+
+    const agregarPassword = (password) => {
+        // Cambiamos los estados
+        dispatch({
+            type: AGREGAR_PASSWORD,
+            payload: password,
+        });
+    };
+
+    const agregarDescargas = (descargas) => {
+        const cantidadDescargas = parseInt(descargas);
+        dispatch({
+            type: AGREGAR_DESCARGAS,
+            payload: cantidadDescargas,
+        });
+    };
     // ------------------- //
 
     return (
@@ -262,6 +282,8 @@ const AppState = ({ children }) => {
                 subirArchivo,
                 crearEnlace,
                 limpiarState,
+                agregarPassword,
+                agregarDescargas,
             }}
         >
             {children}

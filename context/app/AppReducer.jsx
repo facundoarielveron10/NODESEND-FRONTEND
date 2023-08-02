@@ -13,6 +13,8 @@ import {
     SUBIR_ARCHIVO_ERROR,
     CREAR_ENLACE_EXITO,
     CREAR_ENLACE_ERROR,
+    AGREGAR_PASSWORD,
+    AGREGAR_DESCARGAS,
     LIMPIAR_STATE,
 } from '@/types';
 // ----------------------- //
@@ -45,6 +47,7 @@ export default (state, action) => {
             return {
                 ...state,
                 usuario: action.payload,
+                autenticado: true,
             };
         case CERRAR_SESION:
             localStorage.removeItem('token');
@@ -114,6 +117,22 @@ export default (state, action) => {
                 ...state,
                 mensaje_archivo: action.payload,
                 error: true,
+            };
+        case AGREGAR_PASSWORD:
+            return {
+                ...state,
+                archivo: {
+                    ...state.archivo,
+                    password: action.payload,
+                },
+            };
+        case AGREGAR_DESCARGAS:
+            return {
+                ...state,
+                archivo: {
+                    ...state.archivo,
+                    descargas: action.payload,
+                },
             };
         // ----------------------------- //
 
